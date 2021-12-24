@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.demo.model.Goods">
+        <!--@Table mytest.goods-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
+        <result column="price" jdbcType="DOUBLE" property="price"/>
+        <result column="size" jdbcType="INTEGER" property="size"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="modifyTime" jdbcType="VARCHAR" property="modifytime"/>
+        <result column="createTime" jdbcType="VARCHAR" property="createtime"/>
+    </resultMap>
+
+
+    <select id="getGoodsList" resultMap="BaseResultMap">
+        select id, name, type, price, size, status, description, modifyTime
+        from mytest.goods
+        order by modifyTime desc
+    </select>
+
+    <select id="searchGoods" resultMap="BaseResultMap">
+        select id, name, type, price, size, status, description, modifyTime
+        from mytest.goods
+        <where>
+            1 = 1
+            <if test="id != null and id != ''">and id = #{id,jdbcType=BIGINT}</if>
+            <if test="name != null and name != ''">and name = #{name,jdbcType=VARCHAR}</if>
+            <if test="type != null and type != ''">and type like concat('%', #{type,jdbcType=VARCHAR}, '%')</if>
+            <if test="price != null and price != ''">and price = #{price,jdbcType=DOUBLE}</if>
+            <if test="status != null and status != ''">and status = #{status,jdbcType=VARCHAR}</if>
+            <if test="description != null and description != ''">and description = #{description,jdbcType=VARCHAR}</if>
+            <if test="modifytime != null and modifytime != ''">and modifytime = #{modifytime,jdbcType=VARCHAR}</if>
+            <if test="createtime != null and createtime != ''">and createtime = #{createtime,jdbcType=VARCHAR}</if>
+        </where>
+    </select>
+
+    <delete id="deleteGoodsById" parameterType="java.lang.Long">
+        delete from mytest.goods
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <insert id="addGoods" parameterType="com.demo.model.Goods">
+        insert into mytest.goods (id, name, type,
+        price, size, status, description, modifyTime, createTime)
+        values (#{id, jdbcType=BIGINT},
+        #{name, jdbcType=VARCHAR},
+        #{type, jdbcType=VARCHAR},
+        #{price, jdbcType=DOUBLE},
+        #{size, jdbcType=INTEGER},
+        #{status, jdbcType=VARCHAR},
+        #{description, jdbcType=VARCHAR},
+        #{modifytime, jdbcType=VARCHAR},
+        #{createtime, jdbcType=VARCHAR})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.demo.model.Goods">
+        insert into mytest.goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                id,
+            </if>
+            <if test="name != null and name != ''">
+                name,
+            </if>
+            <if test="type != null and type != ''">
+                type,
+            </if>
+            <if test="price != null and price != ''">
+                price,
+            </if>
+            <if test="size != null and size != ''">
+                size,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            <if test="description != null and description != ''">
+                description,
+            </if>
+            <if test="modifytime != null and modifytime != ''">
+                modifyTime,
+            </if>
+            <if test="createtime != null and createtime != ''">
+                createTime,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id != ''">
+                #{id, jdbcType=BIGINT},
+            </if>
+            <if test="name != null and name != ''">
+                #{name, jdbcType=VARCHAR},
+            </if>
+            <if test="type != null and type != ''">
+                #{type, jdbcType=VARCHAR},
+            </if>
+            <if test="price != null and price != ''">
+                #{price, jdbcType=DOUBLE},
+            </if>
+            <if test="size != null and size != ''">
+                #{size, jdbcType=INTEGER},
+            </if>
+            <if test="status != null and status != ''">
+                #{status, jdbcType=VARCHAR},
+            </if>
+            <if test="description != null and description != ''">
+                #{description, jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null and modifytime != ''">
+                #{modifytime, jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null and createtime != ''">
+                #{createtime, jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateGoods" parameterType="com.demo.model.Goods">
+        update mytest.goods
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null and type != ''">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="price != null and price != ''">
+                price = #{price,jdbcType=DOUBLE},
+            </if>
+            <if test="size != null and size != ''">
+                size = #{size,jdbcType=INTEGER},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null and description != ''">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="modifytime != null and modifytime != ''">
+                modifyTime = #{modifytime,jdbcType=VARCHAR},
+            </if>
+            <if test="createtime != null and createtime != ''">
+                createTime = #{createtime,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+    <update id="updateByPrimaryKey" parameterType="com.demo.model.Goods">
+        update mytest.goods
+        set name = #{name, jdbcType=VARCHAR},
+        type = #{type, jdbcType=VARCHAR},
+        price = #{price, jdbcType=DOUBLE},
+        size = #{size, jdbcType=INTEGER},
+        status = #{status, jdbcType=VARCHAR},
+        description = #{description, jdbcType=VARCHAR},
+        modifyTime = #{modifytime, jdbcType=VARCHAR},
+        createTime = #{createtime, jdbcType=VARCHAR}
+        where id = #{id, jdbcType=BIGINT}
+    </update>
+</mapper>

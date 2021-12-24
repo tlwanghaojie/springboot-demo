@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.dao.PersonsMapper">
+    <resultMap id="Person" type="com.demo.model.Persons">
+        <result column="id" property="id" jdbcType="BIGINT"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="age" property="age" jdbcType="BIGINT"/>
+        <result column="sex" property="sex" jdbcType="VARCHAR"/>
+        <result column="address" property="address" jdbcType="VARCHAR"/>
+        <result column="sect" property="sect" jdbcType="VARCHAR"/>
+        <result column="skill" property="skill" jdbcType="VARCHAR"/>
+        <result column="power" property="power" jdbcType="INTEGER"/>
+        <result column="modifyTime" property="modifytime" jdbcType="VARCHAR"/>
+        <result column="createTime" property="createtime" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="getPersonsList" resultMap="Person">
+        select id, name, age, sex, address, sect, skill, power, modifyTime
+        from mytest.persons
+        order by modifyTime desc
+    </select>
+
+    <select id="searchPersons" resultMap="Person">
+        select id, name, age, sex, address, sect, skill, power, modifyTime
+        from mytest.persons
+        <where>
+            1 = 1
+            <if test="id != null and id != ''">and id = #{id,jdbcType=BIGINT}</if>
+            <if test="name != null and name != ''">and name = #{name, jdbcType=VARCHAR}</if>
+            <if test="age != null and age != ''">and age = #{age, jdbcType=BIGINT}</if>
+            <if test="sex != null and age != ''">and sex = #{sex, jdbcType=VARCHAR}</if>
+            <if test="address != null and address != ''">and address = #{address, jdbcType=VARCHAR}</if>
+            <if test="sect != null and sect != ''">and sect like concat('%', #{sect, jdbcType=VARCHAR}, '%')</if>
+            <if test="skill != null and skill != ''">and skill = #{skill, jdbcType=VARCHAR}</if>
+            <if test="power != null and power != ''">and power = #{power, jdbcType=INTEGER}</if>
+        </where>
+    </select>
+
+    <update id="updatePersons" parameterType="com.demo.model.Persons">
+        UPDATE mytest.persons
+        <set>
+            <if test="name != null and name != ''">name = #{name, jdbcType=VARCHAR},</if>
+            <if test="age != null and age != ''">age = #{age, jdbcType=BIGINT},</if>
+            <if test="sex != null and sex != ''">sex = #{sex, jdbcType=VARCHAR},</if>
+            <if test="address != null and address != ''">address = #{address, jdbcType=VARCHAR},</if>
+            <if test="sect != null and sect != ''">sect = #{sect, jdbcType=VARCHAR},</if>
+            <if test="skill != null and skill != ''">skill = #{skill, jdbcType=VARCHAR},</if>
+            <if test="power != null and power != ''">power = #{power, jdbcType=INTEGER},</if>
+            <if test="modifytime != null and modifytime != ''">modifytime = #{modifytime,jdbcType=VARCHAR}</if>
+        </set>
+        WHERE id = #{id, jdbcType=BIGINT}
+    </update>
+
+    <update id="updatePersonsBatch" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index">
+            UPDATE mytest.persons
+            <set>
+                <if test="item.name != null and item.name != ''">
+                    name=#{item.name, jdbcType=VARCHAR},
+                </if>
+                <if test="item.age != null and item.age != ''">
+                    age=#{item.age, jdbcType=BIGINT},
+                </if>
+                <if test="item.sex != null and item.sex != ''">
+                    sex=#{item.sex, jdbcType=VARCHAR},
+                </if>
+                <if test="item.address != null and item.address != ''">
+                    address=#{item.address, jdbcType=VARCHAR},
+                </if>
+                <if test="item.sect != null and item.sect != ''">
+                    sect=#{item.sect, jdbcType=VARCHAR},
+                </if>
+                <if test="item.skill != null and item.skill != ''">
+                    skill=#{item.skill, jdbcType=VARCHAR},
+                </if>
+                <if test="item.power != null and item.power != ''">
+                    power=#{item.power, jdbcType=INTEGER},
+                </if>
+            </set>
+            WHERE
+            id=#{item.id, jdbcType=BIGINT};
+        </foreach>
+    </update>
+
+    <insert id="addPersons" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mytest.persons
+        (id, name, age, sex, address, sect, skill, power, modifytime, createTime)
+        VALUES (#{id, jdbcType=BIGINT},
+                #{name, jdbcType=VARCHAR},
+                #{age, jdbcType=BIGINT},
+                #{sex, jdbcType=VARCHAR},
+                #{address, jdbcType=VARCHAR},
+                #{sect, jdbcType=VARCHAR},
+                #{skill, jdbcType=VARCHAR},
+                #{power, jdbcType=INTEGER},
+                #{modifytime, jdbcType=VARCHAR},
+                #{createtime, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="deletePersonsById" parameterType="java.lang.Long">
+        DELETE FROM mytest.persons
+        <where>
+            id = #{id, jdbcType=BIGINT}
+        </where>
+    </delete>
+</mapper>
